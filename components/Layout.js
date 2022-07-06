@@ -2,7 +2,11 @@ import Head from 'next/head';
 import React from 'react';
 import Link from 'next/link';
 
+import { useSelector, useDispatch } from 'react-redux';
 function Layout({ children, title }) {
+  const urunler = useSelector((state) => state.products.basket);
+
+  console.log(urunler);
   return (
     <>
       <Head>
@@ -18,7 +22,14 @@ function Layout({ children, title }) {
             </Link>
             <div>
               <Link href={'/cart'}>
-                <a className="p-2">Cart</a>
+                <a className="p-2">
+                  Cart
+                  {urunler.length > 0 && (
+                    <span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
+                      {urunler.reduce((a, c) => a + c.count, 1)}
+                    </span>
+                  )}
+                </a>
               </Link>
               <Link href={'/login'}>
                 <a className="p-2">Login</a>

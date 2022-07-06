@@ -7,14 +7,14 @@ import data from '../../utils/data';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-
+import { addToCart } from '../../redux/productsSlice';
 function ProductScreen() {
   const dispatch = useDispatch();
 
   const { query } = useRouter();
+
   const { slug } = query;
   const product = data.products.find((x) => x.slug === slug);
-
   if (!product) {
     return <div>Product not found</div>;
   }
@@ -59,7 +59,12 @@ function ProductScreen() {
               <div>Status</div>
               <div>{product.countInStock > 0 ? 'In stock' : 'Unavailable'}</div>
             </div>
-            <button className="primary-button w-full">Add to cart </button>
+            <button
+              className="primary-button w-full"
+              onClick={() => addToCart(product)(dispatch)}
+            >
+              Add to cart{' '}
+            </button>
           </div>
         </div>
       </div>
