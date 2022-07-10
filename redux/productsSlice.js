@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
 const initialState = {
   products: [],
   basket: [],
@@ -12,6 +11,13 @@ export const addToCart = createAsyncThunk(
   'products/addToCart',
   async (product, { rejectWithValue }) => {
     // state
+    return product;
+  }
+);
+
+export const removeToCartItem = createAsyncThunk(
+  'products/removeToCartItem',
+  async (product, { rejectWithValue }) => {
     return product;
   }
 );
@@ -32,7 +38,7 @@ const productsSlice = createSlice({
       if (
         state.basket.find((x) => x.slug === action.payload.slug) === undefined
       ) {
-        state.basket.push({ ...action.payload, count: 0 });
+        state.basket.push({ ...action.payload, count: 1 });
       } else {
         if (action.payload.countInStock < state.basket[index].count) {
           alert('Not enough stock');
@@ -41,6 +47,12 @@ const productsSlice = createSlice({
         // Eğer ürün sepette varsa, miktarı arttır
         state.basket[index].count++;
       }
+    });
+
+    builder.addCase(removeToCartItem.fulfilled, (state, action) => {
+      state.basket = state.basket.filter(
+        (data) => data.slug !== action.payload.slug
+      );
     });
   },
 });

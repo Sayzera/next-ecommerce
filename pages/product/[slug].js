@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../redux/productsSlice';
 function ProductScreen() {
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const { query } = useRouter();
 
   const { slug } = query;
@@ -61,7 +61,10 @@ function ProductScreen() {
             </div>
             <button
               className="primary-button w-full"
-              onClick={() => addToCart(product)(dispatch)}
+              onClick={() => {
+                addToCart(product)(dispatch);
+                router.push('/cart');
+              }}
             >
               Add to cart{' '}
             </button>
