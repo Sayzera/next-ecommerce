@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import Cookies from 'js-cookie';
+
 const initialState = {
   products: [],
-  basket: [],
+  basket: Cookies.get('products') ? JSON.parse(Cookies.get('products')) : [],
   loading: false,
   error: null,
   test: 'Ramazan',
@@ -39,12 +41,19 @@ const productsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(addToCart.fulfilled, (state, action) => {
-      let index = state.basket.findIndex((x) => x.slug === action.payload.slug);
+      let products = JSON.parse(Cookies.get('products'));
+
+      let index = products.findIndex((x) => x.slug === action.payload.slug);
       // Eğer ürün sepette yok ise, basket'a ekle
 
       if (
         state.basket.find((x) => x.slug === action.payload.slug) === undefined
       ) {
+        Cookies.set(
+          'products',
+          JSON.stringify([{ ...action.payload, count: 1 }])
+        );
+
         state.basket.push({ ...action.payload, count: 1 });
       } else {
         if (action.payload.countInStock < state.basket[index].count) {
@@ -52,6 +61,8 @@ const productsSlice = createSlice({
           return;
         }
         // Eğer ürün sepette varsa, miktarı arttır
+        products[index].count += 1;
+        Cookies.set('products', JSON.stringify(products));
         state.basket[index].count++;
       }
     });
@@ -63,8 +74,11 @@ const productsSlice = createSlice({
     });
 
     builder.addCase(updateQuantity.fulfilled, (state, action) => {
-      console.log(action.payload);
-      let index = state.basket.findIndex((x) => x.slug === action.payload.slug);
+      let products = JSON.parse(Cookies.get('products'));
+
+      let index = products.findIndex((x) => x.slug === action.payload.slug);
+      products[index].count = Number(action.payload.qty);
+      Cookies.set('products', JSON.stringify(products));
       state.basket[index].count = Number(action.payload.qty);
     });
   },

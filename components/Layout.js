@@ -6,7 +6,13 @@ import { useSelector } from 'react-redux';
 function Layout({ children, title }) {
   const urunler = useSelector((state) => state.products.basket);
 
-  console.log(urunler);
+  const [cartItem, setCartItem] = React.useState(0);
+
+  React.useEffect(() => {
+    console.log(urunler);
+    setCartItem(urunler.reduce((a, c) => a + c.count, 0));
+  }, [urunler]);
+
   return (
     <>
       <Head>
@@ -26,7 +32,7 @@ function Layout({ children, title }) {
                   Cart
                   {urunler.length > 0 && (
                     <span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
-                      {urunler.reduce((a, c) => a + c.count, 1)}
+                      {cartItem}
                     </span>
                   )}
                 </a>

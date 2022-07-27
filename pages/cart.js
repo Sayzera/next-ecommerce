@@ -7,9 +7,14 @@ import Image from 'next/image';
 import { removeToCartItem } from '../redux/productsSlice';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { updateQuantity } from '../redux/productsSlice';
+
+import dynamic from 'next/dynamic';
+
 function CartScreen() {
   const basket = useSelector((state) => state.products.basket);
   const dispatch = useDispatch();
+
+  console.log(basket);
 
   console.log(basket);
   return (
@@ -115,4 +120,4 @@ function CartScreen() {
   );
 }
 
-export default CartScreen;
+export default dynamic(() => Promise.resolve(CartScreen), { ssr: false });
