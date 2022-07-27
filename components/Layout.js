@@ -2,7 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 import Link from 'next/link';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 function Layout({ children, title }) {
   const urunler = useSelector((state) => state.products.basket);
 

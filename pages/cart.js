@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { removeToCartItem } from '../redux/productsSlice';
 import { XCircleIcon } from '@heroicons/react/outline';
+import { updateQuantity } from '../redux/productsSlice';
 function CartScreen() {
   const basket = useSelector((state) => state.products.basket);
   const dispatch = useDispatch();
@@ -48,7 +49,38 @@ function CartScreen() {
                         </a>
                       </Link>
                     </td>
-                    <td className="p-5 text-right">{item.count}</td>
+                    <td className="p-5 text-right">
+                      <select
+                        name=""
+                        id=""
+                        onChange={(e) =>
+                          updateQuantity({
+                            qty: e.target.value,
+                            slug: item.slug,
+                          })(dispatch)
+                        }
+                      >
+                        {[...Array(item.countInStock).keys()].map((arr) => {
+                          if (arr + 1 == item.count) {
+                            return (
+                              <>
+                                <option selected key={arr} value={arr + 1}>
+                                  {arr + 1}
+                                </option>
+                              </>
+                            );
+                          } else {
+                            return (
+                              <>
+                                <option key={arr} value={arr + 1}>
+                                  {arr + 1}
+                                </option>
+                              </>
+                            );
+                          }
+                        })}
+                      </select>
+                    </td>
                     <td className="p-5 text-right">{item.price}</td>
 
                     <td className="p-5 text-center">

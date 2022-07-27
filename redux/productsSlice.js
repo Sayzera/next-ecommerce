@@ -15,6 +15,13 @@ export const addToCart = createAsyncThunk(
   }
 );
 
+export const updateQuantity = createAsyncThunk(
+  'products/updateQuantity',
+  async (data, { rejectWithValue }) => {
+    return data;
+  }
+);
+
 export const removeToCartItem = createAsyncThunk(
   'products/removeToCartItem',
   async (product, { rejectWithValue }) => {
@@ -53,6 +60,12 @@ const productsSlice = createSlice({
       state.basket = state.basket.filter(
         (data) => data.slug !== action.payload.slug
       );
+    });
+
+    builder.addCase(updateQuantity.fulfilled, (state, action) => {
+      console.log(action.payload);
+      let index = state.basket.findIndex((x) => x.slug === action.payload.slug);
+      state.basket[index].count = Number(action.payload.qty);
     });
   },
 });

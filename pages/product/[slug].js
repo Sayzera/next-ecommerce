@@ -6,7 +6,7 @@ import Layout from '../../components/Layout';
 import data from '../../utils/data';
 
 // Redux
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/productsSlice';
 function ProductScreen() {
   const dispatch = useDispatch();
